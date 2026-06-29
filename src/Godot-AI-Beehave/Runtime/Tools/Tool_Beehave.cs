@@ -12,26 +12,35 @@ using com.IvanMurzak.McpPlugin;
 namespace com.IvanMurzak.Godot.MCP.Beehave
 {
     /// <summary>
-    /// Sample MCP tool family for the Beehave Tools extension (tool ids prefixed
-    /// <c>beehave-*</c>). A tool family is one <c>[AiToolType]</c> <c>partial class</c>;
-    /// each tool method (<c>[AiTool("&lt;name&gt;")]</c> + <c>[Description]</c>) lives in its own
-    /// partial-class file. This is the SAME authoring model as Unity-MCP and the core Godot-MCP addon —
-    /// ReflectorNet reflects the attributes, McpPlugin's assembly scanner auto-discovers the family
-    /// once the package's source compiles into the consumer's Godot project (no registry edit needed).
+    /// MCP tool family for authoring <b>Beehave</b> behaviour trees in the Godot editor (tool ids prefixed
+    /// <c>beehave-*</c>). One <c>[AiToolType]</c> <c>partial class</c>; each tool method lives in its own
+    /// partial-class file. ReflectorNet reflects the attributes and McpPlugin's assembly scanner auto-discovers
+    /// the family once the source-only package compiles into the consumer's Godot project — no registry edit.
     ///
     /// <para>
-    /// <b>Pure-managed vs editor-only.</b> Split tools by what API they touch, exactly like the core addon:
+    /// <b>This is a CLASS-B (addon-dependent) extension.</b> Beehave is a THIRD-PARTY GDScript addon
+    /// (<c>bitbrain/beehave</c>) whose classes are NOT in GodotSharp, so the package must not take a
+    /// compile-time dependency on it. The editor tools therefore reference Beehave's classes ONLY by string
+    /// name — resolved + driven at runtime through <see cref="AddonInterop"/> (global-class list + <c>GD.Load</c>
+    /// + <c>GodotObject.Set/Get/Call</c> with GDScript <c>snake_case</c> members) — and each editor tool's first
+    /// line is a presence gate (<see cref="AddonGate"/>) returning a structured <c>Installed = false</c> result
+    /// when the addon is absent, never a crash.
+    /// </para>
+    ///
+    /// <para>
+    /// <b>Pure-managed vs editor-only split (load-bearing).</b>
     /// <list type="bullet">
     ///   <item>
-    ///     Tools with NO Godot native API surface (this file's <c>Echo</c>) stay OUTSIDE <c>#if TOOLS</c>
-    ///     so they compile in any consumer build AND are CI-unit-testable (no Godot binary required —
-    ///     a plain xUnit host can construct the class and call the method).
+    ///     Pure-managed cores — the tool-id consts (<c>Tool_Beehave.Ids.cs</c>), the addon class/member/enum-int
+    ///     CONSTANTS (<c>Runtime/Beehave/BeehaveEnums.cs</c>), the kind parsing, the result shapes, the gate
+    ///     shape, and the pure-managed <c>beehave-defaults</c> tool — live OUTSIDE <c>#if TOOLS</c> and are
+    ///     CI-unit-tested (no Godot binary).
     ///   </item>
     ///   <item>
-    ///     Tools that touch the Godot editor (<c>EditorInterface</c>, live <c>Node</c>/<c>Resource</c>)
-    ///     live behind <c>#if TOOLS</c> (see <c>../../Editor/Tools/Tool_Beehave.EditorInfo.cs</c>),
-    ///     so they are excluded from an exported game build, and they marshal onto the editor main thread
-    ///     via <c>MainThread.Instance.Run(...)</c> — NEVER touch Godot objects off-thread.
+    ///     Editor tools (<c>Editor/Tools/*</c>) and the dynamic <see cref="AddonInterop"/>
+    ///     (<c>Runtime/Interop/AddonInterop.cs</c>) live behind <c>#if TOOLS</c>, marshal every Godot call
+    ///     through <c>MainThread.Instance.Run(...)</c>, and are E2E-verified — never unit-tested (constructing a
+    ///     <c>Node</c> in a no-Godot xUnit host faults).
     ///   </item>
     /// </list>
     /// </para>
