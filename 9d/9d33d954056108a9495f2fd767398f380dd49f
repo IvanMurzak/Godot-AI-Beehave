@@ -1,0 +1,33 @@
+tests/e2e/e2e-tools.json
+  s_e3cea916442b5e::t_acb45232e4c8a8 2-10,13-20,23-40
+src/Godot-AI-Beehave/README.md
+  s_e3cea916442b5e::t_518d7a9e432583 46-57
+.github/workflows/test.yml
+  s_a8cc5e4cdb6640::t_092978300e03fd 121-127
+testbed/project.godot
+  s_a8cc5e4cdb6640::t_b692876731973f 19-27,30
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "9d9d33d954056108a9495f2fd767398f380dd49f",
+  "prompts": {},
+  "sessions": {
+    "s_a8cc5e4cdb6640": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a859a575a106b0af1",
+        "model": "unknown"
+      },
+      "human_author": "Ivan Murzak <Ivan.D.Murzak@gmail.com>"
+    },
+    "s_e3cea916442b5e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c575ab56-73e6-4952-bb8b-fef415924e27",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Ivan Murzak <Ivan.D.Murzak@gmail.com>"
+    }
+  }
+}
