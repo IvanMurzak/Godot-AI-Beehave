@@ -118,10 +118,13 @@ jobs:
       #   ADDON_TAG  — the RELEASE TAG to pin (never @latest — keeps the leg reproducible).
       #   ADDON_DIR  — the folder name under testbed/addons/ the addon installs into.
       #   ADDON_KIND — "gdscript" (class_name addon; a copy is enough) or "gdextension" (needs a linux .so).
-      ADDON_REPO: ""
-      ADDON_TAG: ""
-      ADDON_DIR: ""
-      ADDON_KIND: ""
+      # Beehave is a CLASS-B GDScript class_name addon (bitbrain/beehave). The pinned release zip ships the
+      # addons/beehave/ tree; a copy is enough (no GDExtension .so). The testbed project.godot pre-bakes
+      # Beehave's two autoload singletons + enables its plugin so --import boots clean (see guide §3).
+      ADDON_REPO: "bitbrain/beehave"
+      ADDON_TAG: "v2.9.2"
+      ADDON_DIR: "beehave"
+      ADDON_KIND: "gdscript"
     steps:
       - uses: actions/checkout@v6
 

@@ -43,12 +43,17 @@ After a rebuild, the extension's `[AiToolType]` tool families are auto-discovere
 
 ## Tools
 
-| Tool | Description |
-| --- | --- |
-| `beehave-defaults` | Pure-managed — a recommended behaviour-tree skeleton description (needs no addon). |
-| `beehave-create-tree` | Editor — instantiate a `BeehaveTree` under an actor node and wire `actor`/`blackboard`. |
-| `beehave-add-composite` | Editor — add a `SelectorComposite`/`SequenceComposite` under a tree or composite. |
-| `beehave-add-leaf` | Editor — add an `ActionLeaf`/`ConditionLeaf` scaffold under a composite. |
-| `beehave-get-tree` | Editor (read-only) — dump the structure under a named `BeehaveTree`. |
+| Tool | Kind | Description |
+| --- | --- | --- |
+| `beehave-defaults` | pure-managed | Return a recommended behaviour-tree skeleton (root class, tick rate, top-level composite, leaf placeholders). Needs no addon. |
+| `beehave-tree-create` | editor | Create a `BeehaveTree` root in the edited scene; optional parent/actor, `enabled`, `tickRate`. |
+| `beehave-add-composite` | editor | Add a `SelectorComposite`/`SequenceComposite` (`kind`) under a tree or composite. |
+| `beehave-add-decorator` | editor | Add an `InverterDecorator`/`LimiterDecorator` (`kind`) under a tree or composite. |
+| `beehave-add-leaf` | editor | Add an `ActionLeaf`/`ConditionLeaf` (`kind`) scaffold under a composite/decorator. |
+| `beehave-get` | editor (read-only) | Read a `BeehaveTree`'s scalar config + dump its node structure. |
+
+Every editor tool is **presence-gated**: when the Beehave addon is not installed it returns
+`{ "Installed": false, … }` with an install hint instead of crashing. Leaves are abstract — the tools
+scaffold the node skeleton; you attach your own GDScript implementing `tick(actor, blackboard)`.
 
 License: Apache-2.0 (this extension). The wrapped Beehave addon is MIT and is the consumer's own dependency.
