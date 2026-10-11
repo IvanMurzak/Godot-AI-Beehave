@@ -82,7 +82,7 @@ addon **plus the pinned Beehave addon**, and calls each tool — asserting the p
 
 - `docs/source-only-nuget-recipe.md` — the packaging recipe (the centerpiece).
 - `docs/ci.md` — workflows, the version gate, the multi-Godot matrix, required secrets.
-- `CLAUDE.md` — maintainer notes (addon-interop + presence-gate model).
+- `AGENTS.md` — agent / maintainer notes (addon-interop + presence-gate model).
 
 ## Publish
 
