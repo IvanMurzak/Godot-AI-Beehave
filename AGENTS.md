@@ -13,8 +13,7 @@ Beehave is a third-party GDScript addon whose classes are NOT in GodotSharp, and
 on it:
 
 - **No compile-time dependency.** Reference Beehave classes **by string name only**, resolved at runtime.
-  `dotnet build -c Debug` MUST exit 0 with the addon ABSENT (the no-dependency gate; CI also asserts the
-  nuspec).
+  `dotnet build -c Debug` MUST exit 0 with the addon ABSENT (the no-dependency gate).
 - **Resolution:** Beehave registers GDScript `class_name` types in the **global script-class list**, not
   `ClassDB`: resolve via `ProjectSettings.GetGlobalClassList()` + `GD.Load`. `ClassDB.ClassExists` returns
   `false` for a `class_name` type even when installed (the #1 trap).
@@ -55,10 +54,9 @@ on it:
 
 ## Tools
 
-Ids live in `Runtime/Tools/Tool_Beehave.Ids.cs` (the source of truth). Each tool is one partial-class file
-named after it: pure-managed under `Runtime/Tools/`, editor tools under `Editor/Tools/`. Current tools:
-`beehave-defaults` (pure-managed), `beehave-tree-create`, `beehave-add-composite`, `beehave-add-decorator`,
-`beehave-add-leaf`, `beehave-get`.
+Ids live in `Runtime/Tools/Tool_Beehave.Ids.cs` (the source of truth). Current tools: `beehave-defaults`
+(pure-managed), `beehave-tree-create`, `beehave-add-composite`, `beehave-add-decorator`, `beehave-add-leaf`,
+`beehave-get`.
 
 The tools only **author** tree structure (the tree ticks in-game). Beehave leaves are abstract:
 `beehave-add-leaf` creates a scaffold node and the user attaches the behaviour GDScript. Keep at least one
@@ -67,7 +65,7 @@ pure-managed tool (`beehave-defaults`) so the e2e is never vacuous.
 ## Build / test (no Godot binary, addon absent)
 
 ```bash
-dotnet build src/Godot-AI-Beehave/Godot-AI-Beehave.csproj  # source-only package compiles tools (addon NOT needed)
+dotnet build src/Godot-AI-Beehave/Godot-AI-Beehave.csproj  # source-only package compiles tools
 dotnet test  tests/Godot-AI-Beehave.Tests/Godot-AI-Beehave.Tests.csproj
 dotnet pack  src/Godot-AI-Beehave/Godot-AI-Beehave.csproj -p:Version=0.0.0-ci -o local-nuget
 dotnet build testbed/Beehave-Testbed.csproj                # consumes the local package (injection proof)
@@ -85,7 +83,7 @@ testbed, or you silently build the stale cached source.
 - Root namespace `com.IvanMurzak.Godot.MCP.Beehave`. Every `.cs` starts with the Apache-2.0 header.
 - Pure-managed code (tool ids, the `AddonGateResult` shape, name/enum-int constants, defaults) → `Runtime/`
   (outside `#if TOOLS`, unit-testable); editor-driving tools + `AddonInterop` → `#if TOOLS` (every Godot call
-  via `MainThread.Instance.Run(...)`, presence gate first, E2E-verified).
+  via `MainThread.Instance.Run(...)`, E2E-verified).
 - The package declares ONLY the `com.IvanMurzak.McpPlugin` / `com.IvanMurzak.ReflectorNet` min-version deps;
   **GodotSharp and the Beehave addon must never become a package dependency** (CI asserts the nuspec). Keep
   the MCP pins in lockstep with the core Godot-MCP addon; bump with `commands/update-core.ps1`.
